@@ -6,6 +6,7 @@ type getUserType = {
 const getUser = async (req:Request<any,any,getUserType,any>,res:Response<User|string>)=>{
     const prisma = res.prisma
     try{
+        // find user using user id provided from the request
         const user = await prisma.user.findFirstOrThrow({where:{id:req.body.id}})
         return res.send(user)
     }catch(err){
