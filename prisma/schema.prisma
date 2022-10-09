@@ -15,6 +15,7 @@ model User{
   username String @unique
   password String
   email String @unique
+  books Book[]
 }
 
 
@@ -22,16 +23,20 @@ model Book {
   id String @id @default(cuid())
   name String
   description String
-  type BookType[]
+  type BookToType[]
+  author User @relation(fields: [authorId],references: [id]) 
+  authorId String
 }
 
 model BookToType {
   bookId String
+  book Book  @relation(fields: [bookId],references: [id])
   typeName String
+  type BookType @relation(fields: [typeName],references: [type])
   @@id([bookId,typeName])
 }
 
 model BookType {
   type String @id
-  books Book[]
+  books BookToType[]
 }
