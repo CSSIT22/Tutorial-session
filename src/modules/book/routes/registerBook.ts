@@ -12,9 +12,12 @@ type regBook = {
 // connect the booktype to book table and bookType table using BookToType table's as a middleman.
 const registerBook = async (req:Request<any,any,regBook>,res:Response<Book|string>)=>{
     try{
-
+        const {prisma} = res
+        const {description,name,type,userId} = req.body
+        const book = await prisma.book.create({data:{description,name,authorId:userId,type:{createMany:{data:[...type.map(item=>({typeName:item}))]}}}})
+        return res.send(book)
     }catch(err){
-
+        return res.status(400).send("Error")
     }
 }
 
